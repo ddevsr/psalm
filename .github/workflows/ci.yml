@@ -6,13 +6,20 @@ permissions:
 
 jobs:
   lint:
-    name: Check PHP syntax
+    name: Check PHP syntax with PHP ${{ matrix.php-version }}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - '7.4'
+          - '8.4'
+
     steps:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: ${{ matrix.php-version }}
           tools: composer:v2
           coverage: none
         env:
@@ -129,6 +136,7 @@ jobs:
           - "8.1"
           - "8.2"
           - "8.3"
+          - "8.4"
         count: ${{ fromJson(needs.chunk-matrix.outputs.count) }}
         chunk: ${{ fromJson(needs.chunk-matrix.outputs.chunks) }}
 
